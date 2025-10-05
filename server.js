@@ -6,6 +6,9 @@ const { Server } = require("socket.io");
 const connectDB = require("./config/db");
 const initSocket = require("./socket");
 
+// Load environment variables FIRST
+dotenv.config();
+
 connectDB();
 
 const authRoutes = require("./routes/auth.routes");
@@ -30,12 +33,19 @@ app.use("/api/rooms", roomRoutes);
 app.use("/api/tournaments", tournamentRoutes);
 app.use("/api/matches", matchRoutes);
 
-// health
-app.get("/", (req, res) => res.send('Application is running',{ ok: true, time: new Date() }));
+// Health check route - FIXED
+app.get("/", (req, res) => {
+  res.json({ message: 'Application is running', ok: true, time: new Date() });
+});
+
+// 404 handler - should be last
 app.use((req, res) => {
   res.status(404).json({ message: '404: Not Found' });
 });
-PORT = process.env.PORT || 8080;
+
+// PORT declaration - FIXED
+const PORT = process.env.PORT || 8080;
+
 server.listen(PORT, () =>
   console.log(`Server running on port ${PORT} — Socket.IO ready`)
 );
