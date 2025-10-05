@@ -7,7 +7,7 @@ const connectDB = require("./config/db");
 const initSocket = require("./socket");
 
 // Load environment variables FIRST
-dotenv.config();
+// dotenv.config();
 
 connectDB();
 
