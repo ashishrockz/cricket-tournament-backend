@@ -21,7 +21,8 @@
     "mongodb": "^6.20.0",
     "mongoose": "^8.19.0",
     "nanoid": "^5.1.6",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "vercel": "^48.2.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

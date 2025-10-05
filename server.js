@@ -6,7 +6,6 @@ const { Server } = require("socket.io");
 const connectDB = require("./config/db");
 const initSocket = require("./socket");
 
-dotenv.config();
 connectDB();
 
 const authRoutes = require("./routes/auth.routes");
@@ -32,9 +31,11 @@ app.use("/api/tournaments", tournamentRoutes);
 app.use("/api/matches", matchRoutes);
 
 // health
-app.get("/", (req, res) => res.send({ ok: true, time: new Date() }));
-
-const PORT = process.env.PORT || 8080;
+app.get("/", (req, res) => res.send('Application is running',{ ok: true, time: new Date() }));
+app.use((req, res) => {
+  res.status(404).json({ message: '404: Not Found' });
+});
+PORT = process.env.PORT || 8080;
 server.listen(PORT, () =>
   console.log(`Server running on port ${PORT} — Socket.IO ready`)
 );
