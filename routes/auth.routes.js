@@ -9,7 +9,7 @@ const {
   getUserById,
   deleteUser
 } = require("../controllers/auth.controller");
-const { authMiddleware, adminOnly } = require("../middleware/auth.middleware");
+const { authMiddleware, adminOnly } = require("../middlewares/auth.middleware");
 
 // Public routes
 router.post("/register", register);
