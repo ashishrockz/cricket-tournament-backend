@@ -85,3 +85,38 @@ exports.deleteRoom = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+exports.joinRoom = async (req, res) => {
+  try {
+    const { inviteCode, userId } = req.body;
+
+    if (!inviteCode) return res.status(400).json({ message: "Invite code is required" });
+
+    const room = await Room.findOne({ inviteCode }).populate("teams");
+    if (!room) return res.status(404).json({ message: "Room not found" });
+
+    // Optional: if you want to record who joined
+    if (userId) {
+      const userAlreadyInRoom = room.teams.some(team =>
+        team.players.some(p => p.userId?.toString() === userId)
+      );
+
+      if (userAlreadyInRoom) {
+        return res.status(400).json({ message: "User already joined this room" });
+      }
+
+      // If not assigned to any team, add as pending or to Team A
+      const teamA = room.teams[0];
+      if (teamA) {
+        teamA.players.push({ name: "Player", userId });
+        await teamA.save();
+      }
+    }
+
+    res.json({
+      message: "Joined room successfully",
+      room,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
